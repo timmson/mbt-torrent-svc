@@ -1,0 +1,27 @@
+{
+  "name": "mbt-torrent-svc",
+  "version": "0.0.1",
+  "description": "Torrent aggregator",
+  "main": "service.js",
+  "scripts": {
+    "test": "test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/timmson/mbt-torrent-svc.git"
+  },
+  "keywords": [
+    "torrent"
+  ],
+  "author": "timmson",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/timmson/mbt-torrent-svc/issues"
+  },
+  "homepage": "https://github.com/timmson/mbt-torrent-svc#readme",
+  "dependencies": {
+    "express": "^4.15.3",
+    "log4js": "^1.1.1",
+    "node-kinozaltv-api": "^0.1.2"
+  }
+}
