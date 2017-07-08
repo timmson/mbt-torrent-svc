@@ -25,9 +25,8 @@ app.get('/kinozal/search', (request, response) =>
 );
 
 app.get('/kinozal/download', (request, response) => {
-    let fileName = '/tmp/' + request.query.id + '.torrent';
-    kinozalTV.downloadTorrent(request.query.id, fileName).then(
-        res => response.sendFile(fileName),
+    kinozalTV.downloadTorrent(request.query.id).then(
+        res => res.pipe(response),
         err => {
             log.info(err);
             response.status(500).send("Service unavailable");
