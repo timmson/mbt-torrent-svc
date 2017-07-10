@@ -14,6 +14,16 @@ app.use((request, response, next) => {
 });
 
 
+app.get('/kinozal/top', (request, response) =>
+    kinozalTV.getTop(request.query).then(
+        list => response.json(list),
+        err => {
+            log.info(err);
+            response.status(500).send("Service unavailable");
+        }
+    )
+);
+
 app.get('/kinozal/search', (request, response) =>
     kinozalTV.search(request.query).then(
         list => response.json(list),

@@ -1,6 +1,6 @@
 {
   "name": "mbt-torrent-svc",
-  "version": "0.0.1",
+  "version": "0.5.1",
   "description": "Torrent aggregator",
   "main": "service.js",
   "scripts": {
@@ -23,6 +23,6 @@
   "dependencies": {
     "express": "^4.15.3",
     "log4js": "^1.1.1",
-    "node-kinozaltv-api": "^0.2.6"
+    "node-kinozaltv-api": "^0.2.7"
   }
 }
