@@ -34,6 +34,16 @@ app.get('/kinozal/search', (request, response) =>
     )
 );
 
+app.get('/kinozal/detail', (request, response) => {
+    kinozalTV.getDetail(request.query.id).then(
+        res => response.json(res),
+        err => {
+            log.info(err);
+            response.status(500).send("Service unavailable");
+        }
+    )}
+);
+
 app.get('/kinozal/download', (request, response) => {
     kinozalTV.downloadTorrent(request.query.id).then(
         res => res.pipe(response),
