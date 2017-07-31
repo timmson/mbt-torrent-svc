@@ -4,7 +4,7 @@
   "description": "Torrent aggregator",
   "main": "service.js",
   "scripts": {
-    "start" : "node service.js",
+    "start": "node service.js",
     "test": "node test.js"
   },
   "repository": {
