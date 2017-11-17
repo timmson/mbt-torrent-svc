@@ -1,0 +1,19 @@
+version: '2'
+services:
+   mbt-torrent-svc:
+     image: mbt-torrent-svc
+     container_name: torrent-svc-srv
+     build:
+       context: .
+       args:
+         - username=user
+         - config_server
+         - config_path=/mbt-torrent-svc/config.js
+     ports:
+        - 18080:8080
+     restart: always
+
+networks:
+  default:
+    external:
+      name: mynet
