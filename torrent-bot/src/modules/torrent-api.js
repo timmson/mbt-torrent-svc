@@ -21,10 +21,6 @@ TorrentApi.prototype.top = function (s) {
     });
 };
 
-TorrentApi.prototype.download = function (id) {
-    return new Promise((resolve, reject) => resolve(request(this.getDownloadUrl(id))));
-};
-
 TorrentApi.prototype.detail = function (id) {
     return new Promise((resolve, reject) =>
         request(this.torrentSvc + "/kinozal/detail?" + qs.stringify({id: id}),

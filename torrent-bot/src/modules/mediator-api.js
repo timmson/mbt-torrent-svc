@@ -58,30 +58,13 @@ MediatorApi.prototype.handleMessage = function (message) {
     }
 };
 
-MediatorApi.prototype.handleCallback = function (message) {
-    if (message.message.chat.type === "channel") {
-        log.debug(message);
-        this.messageApi.editMessageReplyMarkup(message.from, getLikeButton(parseInt(message.data)), {
-            message_id: message.message.message_id,
-            chat_id: message.message.chat.id,
-        }).catch(err => log.error(err));
-    } else {
-        let data = message.data.split("|");
-        if (data[0] === "download") {
-            this.torrentApi.download(data[1]).then(stream => {
-                this.messageApi.answerCallbackQuery(message.from, message.id, "ОК");
-                this.messageApi.sendDocument(message.from, stream, {caption: data[1] + ".torrent"});
-            });
-        } else {
-            this.torrentApi.add(data[1]).then(
-                ret =>
-                    this.messageApi.answerCallbackQuery(message.from, message.id, ret),
-                error => {
-                    log.error(error);
-                    this.messageApi.answerCallbackQuery(message.from, message.id, error.toString());
-                }
-            );
-        }
+MediatorApi.prototype.handleCallback = async function (message) {
+    try {
+        await this.messageApi.answerCallbackQuery(message.from, message.id, "Downloading ...");
+        await this.messageApi.sendDocument(message.from, this.torrentApi.getDownloadUrl(message.data), {caption: message.data + ".torrent"});
+    } catch (err) {
+        log.error(err);
+        this.messageApi.answerCallbackQuery(message.from, message.id, err.toString())
     }
 };
 
@@ -93,7 +76,7 @@ MediatorApi.prototype.sendTorrentInfo = function (to, row, imageUrl) {
                 [
                     {
                         text: "⬇️ Download",
-                        callback_data: "download|" + row.id.toString()
+                        callback_data: row.id.toString()
                     }
                 ]
             ]
@@ -111,7 +94,7 @@ MediatorApi.prototype.sendTorrentDetail = function (to, row) {
                 [
                     {
                         text: "⬇️ Download",
-                        callback_data: "download|" + row.id.toString()
+                        callback_data: row.id.toString()
                     }
                 ]
             ]
@@ -121,10 +104,6 @@ MediatorApi.prototype.sendTorrentDetail = function (to, row) {
 
 function removeBR(str) {
     return str.split("<br>").join("");
-}
-
-function getLikeButton(cnt) {
-    return JSON.stringify({inline_keyboard: [[{text: "❤ " + cnt, callback_data: "" + (cnt + 1)}]]});
 }
 
 module.exports = MediatorApi;
