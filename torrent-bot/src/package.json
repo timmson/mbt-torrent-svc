@@ -1,0 +1,33 @@
+{
+  "name": "torrent-bot",
+  "version": "1.0.0",
+  "description": "Bot for torrents",
+  "main": "service.js",
+  "dependencies": {
+    "body-parser": "1.17.2",
+    "express": "4.15.3",
+    "log4js": "^1.1.1",
+    "node-telegram-bot-api": "0.27.1",
+    "request": "2.81.0"
+  },
+  "scripts": {
+    "start": "node service.js",
+    "test": "node test.js"
+  },
+  "keywords": [
+    "telegram",
+    "bot",
+    "node"
+  ],
+  "author": "timmson",
+  "license": "GPL-3.0",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/timmson/mbt-telegram-gw.git"
+  },
+  "bugs": {
+    "url": "https://github.com/timmson/mbt-telegram-gw/issues"
+  },
+  "homepage": "https://github.com/timmson/mbt-telegram-gw#readme"
+}

@@ -1,19 +1,28 @@
 version: '2'
 services:
-   mbt-torrent-svc:
-     image: mbt-torrent-svc
-     container_name: torrent-svc-srv
+   torrent-bot:
+     image: torrent-bot
+     container_name: torrent-bot-srv
      build:
-       context: .
+       context: torrent-bot
        args:
          - username=user
          - config_server
-         - config_path=/mbt-torrent-svc/config.js
-     ports:
-        - 18080:8080
+         - config_path=/torrent-bot/config.js
+         - torrent_svc=http://torrent-svc:8080
+     depends_on:
+       - torrent-svc
      restart: always
 
-networks:
-  default:
-    external:
-      name: mynet
+
+   torrent-svc:
+     image: torrent-svc
+     container_name: torrent-svc-srv
+     build:
+       context: torrent-svc
+       args:
+         - username=user
+         - config_server
+         - config_path=/torrent-svc/config.js
+         - svc_port=8080
+     restart: always

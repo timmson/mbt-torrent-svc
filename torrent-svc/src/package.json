@@ -1,5 +1,5 @@
 {
-  "name": "mbt-torrent-svc",
+  "name": "torrent-svc",
   "version": "0.5.1",
   "description": "Torrent aggregator",
   "main": "service.js",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/timmson/mbt-torrent-svc.git"
+    "url": "git+https://github.com/timmson/torrent-bot.git"
   },
   "keywords": [
     "torrent"
@@ -17,9 +17,9 @@
   "author": "timmson",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/timmson/mbt-torrent-svc/issues"
+    "url": "https://github.com/timmson/torrent-bot/issues"
   },
-  "homepage": "https://github.com/timmson/mbt-torrent-svc#readme",
+  "homepage": "https://github.com/timmson/torrent-bot#readme",
   "dependencies": {
     "express": "^4.15.3",
     "log4js": "^1.1.1",

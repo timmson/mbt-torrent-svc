@@ -1,20 +1,20 @@
-const config = require('./config');
-const log = require('log4js').getLogger();
-const app = require('express')();
-const KinozalTV = require('node-kinozaltv-api');
+const config = require("./config");
+const log = require("log4js").getLogger();
+const app = require("express")();
+const KinozalTV = require("node-kinozaltv-api");
 
 const kinozalTV = new KinozalTV(config.kinozal.username, config.kinozal.password, config.kinozal.proxy);
 kinozalTV.authenticate().then(null, err => log.error(err));
 
-const server = app.listen(config.port, () => log.info("Listening on port %s...", server.address().port));
+const server = app.listen(process.env["svc_port"], () => log.info("Listening on port %s...", server.address().port));
 
 app.use((request, response, next) => {
-    log.info(request.method + ' ' + request.url);
+    log.info(request.method + " " + request.url);
     next();
 });
 
 
-app.get('/kinozal/top', (request, response) =>
+app.get("/kinozal/top", (request, response) =>
     kinozalTV.getTop(request.query).then(
         list => response.json(list),
         err => {
@@ -24,7 +24,7 @@ app.get('/kinozal/top', (request, response) =>
     )
 );
 
-app.get('/kinozal/search', (request, response) =>
+app.get("/kinozal/search", (request, response) =>
     kinozalTV.search(request.query).then(
         list => response.json(list),
         err => {
@@ -34,7 +34,7 @@ app.get('/kinozal/search', (request, response) =>
     )
 );
 
-app.get('/kinozal/detail', (request, response) => {
+app.get("/kinozal/detail", (request, response) => {
     kinozalTV.getDetail(request.query.id).then(
         res => response.json(res),
         err => {
@@ -44,7 +44,7 @@ app.get('/kinozal/detail', (request, response) => {
     )}
 );
 
-app.get('/kinozal/download', (request, response) => {
+app.get("/kinozal/download", (request, response) => {
     kinozalTV.downloadTorrent(request.query.id).then(
         res => res.pipe(response),
         err => {
@@ -54,9 +54,14 @@ app.get('/kinozal/download', (request, response) => {
     )}
 );
 
-app.get('*', (request, response) => response.status(404).send('Not found'));
+app.get("*", (request, response) => response.status(404).send("Not found"));
 
-process.on('SIGINT', () => {
-    log.info('Server has stopped');
+process.on("SIGINT", () => {
+    log.info("Server has stopped");
+    process.exit(0);
+});
+
+process.on("SIGTERM", () => {
+    log.info("Server has stopped");
     process.exit(0);
 });
