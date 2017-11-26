@@ -4,7 +4,7 @@ const TorrentApi = require("./torrent-api.js");
 
 function MediatorApi(config) {
     this.messageApi = new MessageApi(config.telegram);
-    this.torrentApi = new TorrentApi(process.env["torrent_svc"]);
+    this.torrentApi = new TorrentApi(config);
 
     let _self = this;
     this.messageApi.on("text", (message) => _self.handleMessage(message));
@@ -30,18 +30,36 @@ MediatorApi.prototype.handleMessage = function (message) {
                     this.messageApi.sendText(message.from, "Ok, see you later!");
                     break;
 
-                case "/top":
-                    let args = message.text.split(" ");
-                    let limit = args.length === 2 ? parseInt(args[1]) : 10;
-                    this.torrentApi.top().then(
-                        list => list.length === 0 ? this.messageApi.sendText(message.from, "Nothing found", {}) : list.slice(limit - 10, limit).forEach(row =>
-                            this.torrentApi.getImageUrl(row.id).then(
-                                url => this.sendTorrentInfo(message.from, row, url).catch(log.error),
-                                error => this.sendTorrentInfo(message.from, row, null).catch(log.error)
-                            )
-                        ),
-                        error => this.messageApi.sendText(message.from, error.toString(), {})
-                    );
+                case "/comedy":
+                    this.getTop(message.from, "comedy", 10);
+                    break;
+
+                case "/fantasy":
+                    this.getTop(message.from, "fantasy", 10);
+                    break;
+
+                case "/horror":
+                    this.getTop(message.from, "horror", 10);
+                    break;
+
+                case "/action":
+                    this.getTop(message.from, "action", 10);
+                    break;
+
+                case "/thriller":
+                    this.getTop(message.from, "thriller", 10);
+                    break;
+
+                case "/drama":
+                    this.getTop(message.from, "drama", 10);
+                    break;
+
+                case "/russian":
+                    this.getTop(message.from, "russian", 10);
+                    break;
+
+                case "/kids":
+                    this.getTop(message.from, "kids", 10);
                     break;
             }
         }
@@ -61,10 +79,10 @@ MediatorApi.prototype.handleMessage = function (message) {
 MediatorApi.prototype.handleCallback = async function (message) {
     try {
         await this.messageApi.answerCallbackQuery(message.from, message.id, "Downloading ...");
-        await this.messageApi.sendDocument(message.from, this.torrentApi.getDownloadUrl(message.data), {caption: message.data + ".torrent"});
+        await this.messageApi.sendDocument(message.from, await this.torrentApi.getDownloadStream(message.data), {caption: "id" + message.data + ".torrent"});
     } catch (err) {
         log.error(err);
-        this.messageApi.answerCallbackQuery(message.from, message.id, err.toString())
+        this.messageApi.answerCallbackQuery(message.from, message.id, err.toString()).catch(err => {});
     }
 };
 
@@ -100,6 +118,25 @@ MediatorApi.prototype.sendTorrentDetail = function (to, row) {
             ]
         })
     });
+};
+
+MediatorApi.prototype.getTop = async function (to, genre, limit) {
+    try {
+        let list = await this.torrentApi.top(genre);
+        list.length === 0 ? this.messageApi.sendText(to, "Nothing found", {}) : list.slice(0, limit || 10).forEach(
+            async row => {
+                try {
+                    let url = await this.torrentApi.getImageUrl(row.id);
+                    await this.sendTorrentInfo(to, row, url);
+                } catch (err) {
+                    log.error(err);
+                }
+            }
+        );
+    } catch (err) {
+        log.error(err);
+        this.messageApi.sendText(to.from, err.toString(), {});
+    }
 };
 
 function removeBR(str) {

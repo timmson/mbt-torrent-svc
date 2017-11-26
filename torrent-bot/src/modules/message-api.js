@@ -5,12 +5,7 @@ const TelegramBotApi = require('node-telegram-bot-api');
 
 function MessageApi(config) {
     this.bot = new TelegramBotApi(config.token, config.params);
-    this.ownerId = config.owner;
 }
-
-MessageApi.prototype.isOwner = function (id) {
-    return this.ownerId === id;
-};
 
 MessageApi.prototype.on = function (name, handler) {
     return this.bot.on(name, handler);
@@ -31,9 +26,9 @@ MessageApi.prototype.sendVideo = function (to, videoUrl, params) {
     return this.bot.sendVideo(to.id, request(videoUrl), params);
 };
 
-MessageApi.prototype.sendDocument = function (to, documentUrl, params) {
-    log.info(to.username + ' <- ' + '[file:' + documentUrl + ']');
-    return this.bot.sendDocument(to.id, request(documentUrl), params);
+MessageApi.prototype.sendDocument = function (to, stream, params) {
+    log.info(to.username + ' <- ' + '[file]');
+    return this.bot.sendDocument(to.id, stream, params);
 };
 
 MessageApi.prototype.answerCallbackQuery = function (to, messageId, text) {
