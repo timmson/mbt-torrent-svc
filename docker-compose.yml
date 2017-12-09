@@ -4,7 +4,7 @@ services:
      image: torrent-bot
      container_name: torrent-bot-srv
      build:
-       context: torrent-bot
+       context: .
        args:
          - username=user
          - config_server

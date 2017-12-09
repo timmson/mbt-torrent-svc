@@ -65,7 +65,7 @@ MediatorApi.prototype.handleMessage = function (message) {
         }
     } else {
         this.torrentApi.search(message.text).then(
-            list => list.length === 0 ? this.messageApi.sendText(message.from, "Nothing found", {}) : list.forEach(row =>
+            list => list.length === 0 ? this.messageApi.sendText(message.from, "Nothing found", {}) : list.slice(0,20).forEach(row =>
                 this.torrentApi.getImageUrl(row.id).then(
                     url => this.sendTorrentInfo(message.from, row, url).catch(log.error),
                     error => this.sendTorrentInfo(message.from, row, null).catch(log.error)

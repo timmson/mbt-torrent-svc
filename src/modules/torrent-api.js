@@ -1,16 +1,9 @@
 const log = require("log4js").getLogger();
-const KinozalTV = require("node-kinozaltv-api");
-
-/** Tor **/
-const proxy = {
-    ipaddress: "localhost",
-    port: 9050,
-    type: 5
-};
+const KinozalTv = require("node-t-tracker").KinozalTv;
 
 function TorrentApi(config) {
-
-    this.kinozalTV = new KinozalTV(config.kinozal.username, config.kinozal.password, config.kinozal.proxy ? proxy : null);
+    log.info(config.proxy);
+    this.kinozalTV = new KinozalTv(config.kinozal.username, config.kinozal.password, config.proxy);
     this.kinozalTV.authenticate().catch(err => log.error(err));
 }
 

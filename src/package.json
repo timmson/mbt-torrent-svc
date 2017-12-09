@@ -6,7 +6,7 @@
   "dependencies": {
     "body-parser": "1.17.2",
     "log4js": "^1.1.1",
-    "node-kinozaltv-api": "^0.3.8",
+    "node-t-tracker": "^0.4.3",
     "node-telegram-bot-api": "0.27.1",
     "request": "2.81.0"
   },
@@ -24,10 +24,10 @@
   "devDependencies": {},
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/timmson/mbt-telegram-gw.git"
+    "url": "git+https://github.com/timmson/torrent-bot.git"
   },
   "bugs": {
-    "url": "https://github.com/timmson/mbt-telegram-gw/issues"
+    "url": "https://github.com/timmson/torrent-bot/issues"
   },
-  "homepage": "https://github.com/timmson/mbt-telegram-gw#readme"
+  "homepage": "https://github.com/timmson/torrent-bot#readme"
 }
