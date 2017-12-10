@@ -20,7 +20,7 @@ MediatorApi.prototype.handleMessage = async function (message) {
                 let detail = await this.torrentApi.detail(text);
                 await this.sendTorrentDetail(message.from, detail);
             } catch (err) {
-                this.messageApi.sendText(message.from, error.toString(), {})
+                this.messageApi.sendText(message.from, err.toString(), {})
             }
         } else {
             switch (text) {
@@ -90,7 +90,7 @@ MediatorApi.prototype.handleMessage = async function (message) {
                 }
             }
         } catch (err) {
-            this.messageApi.sendText(message.from, error.toString(), {});
+            this.messageApi.sendText(message.from, err.toString(), {});
         }
     }
 };
