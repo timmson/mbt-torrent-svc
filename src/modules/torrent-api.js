@@ -60,7 +60,6 @@ TorrentApi.prototype.detail = function (textId) {
                 case "kn":
                     detail = await this.kinozalTV.getDetail(id[0]);
                     detail = merge(detail, trackers.kinozal);
-                    log.info(detail);
                     break;
                 case "ru":
                     //detail = await this.ruTrackerOrg.getDetail(id[0]);

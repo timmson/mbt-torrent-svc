@@ -17,7 +17,7 @@ MediatorApi.prototype.handleMessage = async function (message) {
     if (text[0] === "/") {
         if (text.search(/(ru\d|kn\d)/) >= 0) {
             try {
-                let detail = await this.torrentApi.detail(text);
+                let detail = await this.torrentApi.detail(text.substr(1));
                 await this.sendTorrentDetail(message.from, detail);
             } catch (err) {
                 this.messageApi.sendText(message.from, err.toString(), {})
