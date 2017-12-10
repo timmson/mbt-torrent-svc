@@ -1,6 +1,5 @@
 const config = require("./config.js");
 const log = require("log4js").getLogger();
-log.setLevel("info");
 
 const MediatorApi = require("./modules/mediator-api.js");
 const mediatorApi = new MediatorApi(config);

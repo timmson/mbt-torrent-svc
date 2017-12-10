@@ -1,51 +1,106 @@
-const log = require("log4js").getLogger();
-const KinozalTv = require("node-t-tracker").KinozalTv;
+const log = require("log4js").getLogger("torrent-api");
+const {KinozalTv, RuTrackerOrg} = require("node-t-tracker");
+
+const trackers = {
+    kinozal: "kn",
+    rutracker: "ru"
+};
 
 function TorrentApi(config) {
-    log.info(config.proxy);
     this.kinozalTV = new KinozalTv(config.kinozal.username, config.kinozal.password, config.proxy);
     this.kinozalTV.authenticate().catch(err => log.error(err));
+
+    this.ruTrackerOrg = new RuTrackerOrg(config.rutracker.username, config.rutracker.password, config.proxy);
+    this.ruTrackerOrg.authenticate().catch(err => log.error(err));
 }
 
-TorrentApi.prototype.search = function (s) {
+TorrentApi.prototype.searchMovie = function (s) {
     return new Promise(async (resolve, reject) => {
         try {
-            resolve(await this.kinozalTV.search({title: s}));
+            let list = await this.kinozalTV.search({title: s});
+            resolve(list.map(row => merge(row, trackers.kinozal)));
         } catch (err) {
-            log.info(err);
+            log.error(err);
             reject(err);
         }
     });
 };
 
-TorrentApi.prototype.top = function (genre) {
+TorrentApi.prototype.searchSoftware = function (s) {
     return new Promise(async (resolve, reject) => {
         try {
-            resolve(await this.kinozalTV.getTop(genre));
+            let list = await this.ruTrackerOrg.search({title: s});
+            resolve(list.map(row => merge(row, trackers.rutracker)));
         } catch (err) {
-            log.info(err);
+            log.error(err);
             reject(err);
         }
     });
 };
 
-TorrentApi.prototype.detail = function (id) {
+
+TorrentApi.prototype.topMovies = function (genre) {
     return new Promise(async (resolve, reject) => {
         try {
-            resolve(await this.kinozalTV.getDetail(id));
+            let list =await this.kinozalTV.getTop(genre);
+            resolve(list.map(row => merge(row, trackers.kinozal)));
         } catch (err) {
-            log.info(err);
+            log.error(err);
             reject(err);
         }
     });
 };
 
-TorrentApi.prototype.getDownloadStream = function (id) {
-    return this.kinozalTV.getDownloadStream(id);
+TorrentApi.prototype.detail = function (textId) {
+    let id = split(textId);
+    return new Promise(async (resolve, reject) => {
+        try {
+            let detail = null;
+            switch (id[1]) {
+                case "kn":
+                    detail = await this.kinozalTV.getDetail(id[0]);
+                    detail = merge(detail, trackers.kinozal);
+                    log.info(detail);
+                    break;
+                case "ru":
+                    //detail = await this.ruTrackerOrg.getDetail(id[0]);
+                    //detail = merge(detail, trackers.rutracker);
+                    break;
+            }
+            resolve(detail)
+        } catch (err) {
+            log.error(err);
+            reject(err);
+        }
+    });
+};
+
+TorrentApi.prototype.getDownloadStream = function (textId) {
+    let id = split(textId);
+    let stream = null;
+    switch (id[1]) {
+        case "kn":
+            stream = this.kinozalTV.getDownloadStream(id[0]);
+            break;
+        case "ru":
+            stream = this.ruTrackerOrg.getDownloadStream(id[0]);
+            break;
+    }
+    return stream;
 };
 
 TorrentApi.prototype.getImageUrl = function (id) {
     return new Promise((resolve, reject) => this.detail(id).then(detail => resolve(detail.img), err => reject(err)));
 };
+
+function merge(row, type) {
+    row.id = type + row.id.toString();
+    return row;
+}
+
+function split(id) {
+    return [id.substr(2, id.length - 2), id.substr(0, 2)];
+}
+
 
 module.exports = TorrentApi;
