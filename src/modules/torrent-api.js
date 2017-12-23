@@ -12,6 +12,8 @@ function TorrentApi(config) {
 
     this.ruTrackerOrg = new RuTrackerOrg(config.rutracker.username, config.rutracker.password, config.proxy);
     this.ruTrackerOrg.authenticate().catch(err => log.error(err));
+
+    log.info("Authorized");
 }
 
 TorrentApi.prototype.searchMovie = function (s) {
@@ -57,13 +59,13 @@ TorrentApi.prototype.detail = function (textId) {
         try {
             let detail = null;
             switch (id[1]) {
-                case "kn":
+                case trackers.kinozal:
                     detail = await this.kinozalTV.getDetail(id[0]);
                     detail = merge(detail, trackers.kinozal);
                     break;
-                case "ru":
-                    //detail = await this.ruTrackerOrg.getDetail(id[0]);
-                    //detail = merge(detail, trackers.rutracker);
+                case trackers.rutracker:
+                    detail = await this.ruTrackerOrg.getDetail(id[0]);
+                    detail = merge(detail, trackers.rutracker);
                     break;
             }
             resolve(detail)

@@ -67,27 +67,12 @@ MediatorApi.prototype.handleMessage = async function (message) {
         }
     } else {
         try {
-            if (text.startsWith("rutracker")) {
-                let list = await this.torrentApi.searchSoftware(text.split(" ")[1]);
-                if (list.length === 0) {
-                    this.messageApi.sendText(message.from, "Nothing found", {})
-                }
-                for (let i = 0; i < list.length && i < 20; i++) {
-                    await this.sendTorrentInfo(message.from, list[i], null);
-                }
-            } else {
-                let list = await this.torrentApi.searchMovie(message.text);
-                if (list.length === 0) {
-                    this.messageApi.sendText(message.from, "Nothing found", {})
-                }
-                for (let i = 0; i < list.length && i < 20; i++) {
-                    try {
-                        let imageUrl = await this.torrentApi.getImageUrl(list[i].id);
-                        await this.sendTorrentInfo(message.from, list[i], imageUrl);
-                    } catch (err) {
-                        this.sendTorrentInfo(message.from, list[i], null);
-                    }
-                }
+            let list = text.startsWith("rutracker") ? await this.torrentApi.searchSoftware(text.split(" ")[1]) : await this.torrentApi.searchMovie(message.text);
+            if (list.length === 0) {
+                this.messageApi.sendText(message.from, "Nothing found", {})
+            }
+            for (let i = 0; i < list.length && i < 10; i++) {
+                await this.sendTorrentInfo(message.from, list[i]);
             }
         } catch (err) {
             this.messageApi.sendText(message.from, err.toString(), {});
@@ -107,7 +92,7 @@ MediatorApi.prototype.handleCallback = async function (message) {
     }
 };
 
-MediatorApi.prototype.sendTorrentInfo = function (to, row, imageUrl) {
+MediatorApi.prototype.sendTorrentInfo = async function (to, row) {
     const parameters = {
         caption: row.title + "\n" + row.size + "\nDetails: /" + row.id,
         reply_markup: JSON.stringify({
@@ -121,12 +106,20 @@ MediatorApi.prototype.sendTorrentInfo = function (to, row, imageUrl) {
             ]
         })
     };
-
-    return imageUrl ? this.messageApi.sendPhoto(to, imageUrl, parameters) : this.messageApi.sendText(to, parameters.caption, parameters);
+    try {
+        let imageUrl = await this.torrentApi.getImageUrl(row.id);
+        await this.messageApi.sendPhoto(to, imageUrl, parameters)
+    } catch (err) {
+        try {
+            await this.messageApi.sendText(to, parameters.caption, parameters);
+        } catch (err) {
+            this.messageApi.sendText(to, err.toString(), {});
+        }
+    }
 };
 
 MediatorApi.prototype.sendTorrentDetail = function (to, row) {
-    return this.messageApi.sendText(to, "<b>" + row.title + "</b>\n\n" + removeBR(row.specs) + "\n\n" + removeBR(row.description) + "\nid" + row.id, {
+    return this.messageApi.sendText(to, "<b>" + row.title + "</b>\n\n" + removeBR(row.specs) + "\n\n" + removeBR(row.description) + "\n" + row.id, {
         parse_mode: "HTML",
         reply_markup: JSON.stringify({
             inline_keyboard: [
