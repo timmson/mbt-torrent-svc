@@ -5,7 +5,7 @@ ARG username
 ARG config_server
 ARG config_path
 
-RUN apt update && apt install -y tor make g++ && \
+RUN apt update && \
     useradd ${username} -s /bin/bash -G sudo -md /home/${username} && \
     sed -i.bkp -e 's/%sudo\s\+ALL=(ALL\(:ALL\)\?)\s\+ALL/%sudo ALL=NOPASSWD:ALL/g' /etc/sudoers && \
     mkdir /app
@@ -14,8 +14,8 @@ WORKDIR /app
 
 COPY src/ .
 
-RUN wget ${config_server}${config_path} && npm i && chown -R ${username}:${username} . && chmod +x run.sh
+RUN wget ${config_server}${config_path} && npm i && chown -R ${username}:${username} .
 
 USER ${username}
 
-CMD ["./run.sh"]
+CMD ["npm", "start"]
