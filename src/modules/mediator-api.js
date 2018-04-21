@@ -99,8 +99,12 @@ MediatorApi.prototype.sendTorrentInfo = async function (to, row) {
             inline_keyboard: [
                 [
                     {
-                        text: "⬇️ Download",
+                        text: "⬇️Download",
                         callback_data: row.id
+                    },
+                    {
+                        text: "🌍️ Open",
+                        url: row.url
                     }
                 ]
             ]
@@ -128,6 +132,10 @@ MediatorApi.prototype.sendTorrentDetail = async function (to, row) {
                     {
                         text: "⬇️ Download",
                         callback_data: row.id
+                    },
+                    {
+                        text: "🌍️ Open",
+                        url: row.url
                     }
                 ]
             ]
