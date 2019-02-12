@@ -14,7 +14,7 @@ WORKDIR /app
 
 COPY src/ .
 
-RUN wget ${config_server}${config_path} && npm i && chown -R ${username}:${username} .
+#RUN wget ${config_server}${config_path} && npm i && chown -R ${username}:${username} .
 
 USER ${username}
 
