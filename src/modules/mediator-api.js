@@ -67,7 +67,7 @@ MediatorApi.prototype.handleMessage = async function (message) {
         }
     } else {
         try {
-            let list = text.startsWith("rutracker") ? await this.torrentApi.searchSoftware(text.split(" ")[1]) : await this.torrentApi.searchMovie(message.text);
+            let list = text.startsWith("rutracker") ? await this.torrentApi.searchSoftware(text.split(" ").slice(1).join(" ")) : await this.torrentApi.searchMovie(message.text);
             if (list.length === 0) {
                 this.messageApi.sendText(message.from, "Nothing was found", {})
             }

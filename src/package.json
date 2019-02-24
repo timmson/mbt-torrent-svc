@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "description": "Bot for torrents",
   "main": "service.js",
+  "private": true,
   "dependencies": {
-    "body-parser": "1.17.2",
+    "body-parser": "1.18.3",
     "log4js": "^3.0.1",
     "node-t-tracker": "^0.5.0",
     "node-telegram-bot-api": "0.30.0",
@@ -20,7 +21,7 @@
     "node"
   ],
   "author": "timmson",
-  "license": "GPL-3.0",
+  "license": "MIT",
   "devDependencies": {},
   "repository": {
     "type": "git",
