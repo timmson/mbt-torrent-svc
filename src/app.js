@@ -45,6 +45,7 @@ let sendTorrentList = (ctx, list) => {
 };
 
 let sendTorrentDetail = (ctx, detail) => {
+    log.info("Downloading "  + detail.img);
     return Promise.all([
         ctx.replyWithPhoto({
             source: detail.img
