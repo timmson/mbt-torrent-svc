@@ -1,14 +1,9 @@
 const config = require("./config.js");
 const log = require("log4js").getLogger();
-//const Agent = require("socks-proxy-agent");
 
 const Telegraf = require("telegraf");
 const Markup = require("telegraf/markup");
-const bot = new Telegraf(config.telegram.token, {
-    telegram: {
-        agent: new require("socks-proxy-agent")("socks://127.0.0.1:9050")
-    }
-});
+const bot = new Telegraf(config.telegram.token);
 
 
 const TorrentApi = require("./modules/torrent-api");
