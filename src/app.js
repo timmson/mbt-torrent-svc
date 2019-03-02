@@ -1,10 +1,11 @@
 const config = require("./config.js");
 const log = require("log4js").getLogger();
 
+log.level = "info";
+
 const Telegraf = require("telegraf");
 const Markup = require("telegraf/markup");
 const bot = new Telegraf(config.telegram.token);
-
 
 const TorrentApi = require("./modules/torrent-api");
 const torrentApi = new TorrentApi(config);
@@ -68,36 +69,31 @@ let sendTorrentDetail = (ctx, detail) => {
 };
 
 bot.on("text", async (ctx) => {
-    log.info(ctx.from.username + " <- " + ctx.text);
+    log.info(ctx.from.username + " <- " + ctx.message.text);
     const text = ctx.message.text;
-    if (text[0] === "/") {
-        if (text.search(/(ru\d|kn\d)/) >= 0) {
-            try {
+    try {
+        if (text[0] === "/") {
+            if (text.search(/(ru\d|kn\d)/) >= 0) {
                 let detail = await torrentApi.detail(text.substr(1));
                 await sendTorrentDetail(ctx, detail);
-            } catch (err) {
-                await ctx.reply(err.toString());
+            } else {
+                if (text === "/start") {
+                    await ctx.reply("Hi, use the buttons below to choose genre or send me you would like to find");
+                } else if (text === "/stop") {
+                    await ctx.reply("Ok, see you later!");
+                } else if (GENRES.indexOf(text.slice(1)) >= 0) {
+                    let list = await torrentApi.topMovies(text.slice(1));
+                    sendTorrentList(ctx, list.slice(0, 10));
+                } else {
+                    await ctx.reply("Sorry, command isn`t support");
+                }
             }
         } else {
-            if (text === "/start") {
-                await ctx.reply("Hi, use the buttons below to choose genre or send me you would like to find");
-            } else if (text === "/stop") {
-                await ctx.reply("Ok, see you later!");
-            } else if (GENRES.indexOf(text.slice(1)) >= 0) {
-                let list = await torrentApi.topMovies(text.slice(1));
-                sendTorrentList(ctx, list.slice(0, 10));
-            } else {
-                await ctx.reply("Sorry, command isn`t support");
-            }
-        }
-    } else {
-        try {
             let list = [].concat.apply([], await Promise.all([torrentApi.searchMovie(text), torrentApi.searchSoftware(text)]));
             await sendTorrentList(ctx, list);
-        } catch (err) {
-            log.error(err);
-            ctx.reply(err.toString());
         }
+    } catch (err) {
+        await ctx.reply(err.toString());
     }
 });
 
