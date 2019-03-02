@@ -47,9 +47,9 @@ let sendTorrentList = (ctx, list) => {
 let sendTorrentDetail = (ctx, detail) => {
     log.info("Downloading "  + detail.img);
     return Promise.all([
-        ctx.replyWithPhoto({
-            source: detail.img
-        }),
+        // ctx.replyWithPhoto({
+        //     source: detail.img
+        // }),
         ctx.replyWithHTML("<b>" + detail.title + "</b>\n\n" + removeBR(detail.specs) + "\n\n" + removeBR(detail.description) + "\n" + detail.id,
             Markup.inlineKeyboard([
                 Markup.callbackButton("⬇️Download", detail.id),
@@ -98,6 +98,7 @@ bot.on("callback_query", async (ctx) => {
         await ctx.answerCbQuery("Downloading ...");
         log.info(ctx.callbackQuery.data);
         await ctx.replyWithDocument({
+            filename: ctx.callbackQuery.data + ".torrent",
             source: await torrentApi.getDownloadStream(ctx.callbackQuery.data)
         });
     } catch (err) {
