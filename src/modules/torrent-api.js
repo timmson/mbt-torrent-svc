@@ -1,5 +1,6 @@
 const log = require("log4js").getLogger("torrent-api");
 const {KinozalTv, RuTrackerOrg} = require("node-t-tracker");
+const request = require("request");
 
 const trackers = {
     kinozal: "kn",
@@ -7,10 +8,10 @@ const trackers = {
 };
 
 function TorrentApi(config) {
-    this.kinozalTV = new KinozalTv(config.kinozal.username, config.kinozal.password, config.proxy);
+    this.kinozalTV = new KinozalTv(config.kinozal.username, config.kinozal.password, config.proxy, request);
     this.kinozalTV.authenticate().catch(err => log.error(err));
 
-    this.ruTrackerOrg = new RuTrackerOrg(config.rutracker.username, config.rutracker.password, config.proxy);
+    this.ruTrackerOrg = new RuTrackerOrg(config.rutracker.username, config.rutracker.password, config.proxy, request);
     this.ruTrackerOrg.authenticate().catch(err => log.error(err));
 
     log.info("Authorized");
