@@ -45,27 +45,21 @@ let sendTorrentList = (ctx, list) => {
 };
 
 let sendTorrentDetail = (ctx, detail) => {
-    return new Promise(async resolve => {
-        try {
-            await ctx.replyWithPhoto({
-                source: await torrentApi.getImageUrl(detail.id)
-            });
-            await ctx.replyWithHTML("<b>" + detail.title + "</b>\n\n" + removeBR(detail.specs) + "\n\n" + removeBR(detail.description) + "\n" + detail.id,
-                Markup.inlineKeyboard([
-                    Markup.callbackButton("⬇️Download", detail.id),
-                    /**
-                     * TODO it later
-                     Markup.callbackButton("🖥 Download to PC", torrent.id),
-                     */
-                    Markup.callbackButton("🌍️ Open", detail.url),
+    return Promise.all([
+/*        ctx.replyWithPhoto({
+            source: await torrentApi.getImageUrl(detail.id)
+        }),*/
+        ctx.replyWithHTML("<b>" + detail.title + "</b>\n\n" + removeBR(detail.specs) + "\n\n" + removeBR(detail.description) + "\n" + detail.id,
+            Markup.inlineKeyboard([
+                Markup.callbackButton("⬇️Download", detail.id),
+                /**
+                 * TODO it later
+                 Markup.callbackButton("🖥 Download to PC", torrent.id),
+                 */
+                Markup.callbackButton("🌍️ Open", detail.url),
 
-                ]).extra()
-            );
-        } catch (err) {
-
-        }
-        resolve("OK");
-    });
+            ]).extra()
+        )]);
 };
 
 bot.on("text", async (ctx) => {
