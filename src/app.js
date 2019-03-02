@@ -75,7 +75,15 @@ bot.on("text", async (ctx) => {
                 await sendTorrentDetail(ctx, detail);
             } else {
                 if (text === "/start") {
-                    await ctx.reply("Hi, use the buttons below to choose genre or send me you would like to find");
+                    await ctx.reply("Hi, use the buttons below to choose genre or send me you would like to find",
+                        Markup
+                            .keyboard([
+                                ["/comedy", "/fantasy"],
+                                ["/horror", "/action"],
+                                ["/thriller", "/drama"],
+                                ["/russian", "/kids"]
+                            ]).resize().extra()
+                    );
                 } else if (text === "/stop") {
                     await ctx.reply("Ok, see you later!");
                 } else if (GENRES.indexOf(text.slice(1)) >= 0) {
