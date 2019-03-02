@@ -69,7 +69,7 @@ let sendTorrentDetail = (ctx, detail) => {
 
 bot.on("text", async (ctx) => {
     log.info(ctx.from.username + " <- " + ctx.text);
-    const text = message.text;
+    const text = ctx.message.text;
     if (text[0] === "/") {
         if (text.search(/(ru\d|kn\d)/) >= 0) {
             try {
