@@ -45,11 +45,12 @@ let sendTorrentList = (ctx, list) => {
 };
 
 let sendTorrentDetail = (ctx, detail) => {
-    log.info("Downloading "  + detail.img);
+    log.info("Downloading " + detail.img);
     return Promise.all([
-        // ctx.replyWithPhoto({
-        //     source: detail.img
-        // }),
+        detail.img ?
+            ctx.replyWithPhoto({
+                source: detail.img
+            }) : new Promise(resolve => resolve("OK")),
         ctx.replyWithHTML("<b>" + detail.title + "</b>\n\n" + removeBR(detail.specs) + "\n\n" + removeBR(detail.description) + "\n" + detail.id,
             Markup.inlineKeyboard([
                 Markup.callbackButton("⬇️Download", detail.id),

@@ -90,10 +90,6 @@ TorrentApi.prototype.getDownloadStream = function (textId) {
     return stream;
 };
 
-TorrentApi.prototype.getImageUrl = function (id) {
-    return new Promise((resolve, reject) => this.detail(id).then(detail => resolve(detail.img), err => reject(err)));
-};
-
 function merge(row, type) {
     row.id = type + row.id.toString();
     return row;
