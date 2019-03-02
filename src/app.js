@@ -46,9 +46,9 @@ let sendTorrentList = (ctx, list) => {
 
 let sendTorrentDetail = (ctx, detail) => {
     return Promise.all([
-/*        ctx.replyWithPhoto({
-            source: await torrentApi.getImageUrl(detail.id)
-        }),*/
+        ctx.replyWithPhoto({
+            source: detail.img
+        }),
         ctx.replyWithHTML("<b>" + detail.title + "</b>\n\n" + removeBR(detail.specs) + "\n\n" + removeBR(detail.description) + "\n" + detail.id,
             Markup.inlineKeyboard([
                 Markup.callbackButton("⬇️Download", detail.id),
