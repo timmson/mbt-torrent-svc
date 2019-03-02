@@ -49,7 +49,8 @@ let sendTorrentDetail = (ctx, detail) => {
     return Promise.all([
         detail.img ?
             ctx.replyWithPhoto({
-                source: detail.img
+                filename: detail.title,
+                url: detail.img
             }) : new Promise(resolve => resolve("OK")),
         ctx.replyWithHTML("<b>" + detail.title + "</b>\n\n" + removeBR(detail.specs) + "\n\n" + removeBR(detail.description) + "\n" + detail.id,
             Markup.inlineKeyboard([
