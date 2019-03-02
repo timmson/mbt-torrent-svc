@@ -2,17 +2,17 @@
   "name": "torrent-bot",
   "version": "1.0.0",
   "description": "Bot for torrents",
-  "main": "service.js",
+  "main": "app.js",
   "private": true,
   "dependencies": {
     "body-parser": "1.18.3",
     "log4js": "^3.0.1",
     "node-t-tracker": "^0.5.0",
-    "node-telegram-bot-api": "0.30.0",
-    "request": "2.87.0"
+    "request": "2.87.0",
+    "telegraf": "3.27.1"
   },
   "scripts": {
-    "start": "node service.js",
+    "start": "node app.js",
     "test": "node test.js"
   },
   "keywords": [
@@ -22,7 +22,9 @@
   ],
   "author": "timmson",
   "license": "MIT",
-  "devDependencies": {},
+  "devDependencies": {
+    "socks-proxy-agent": "4.0.1"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/timmson/torrent-bot.git"
