@@ -1,5 +1,6 @@
 const config = require("./config.js");
 const log = require("log4js").getLogger();
+const packageInfo = require("./package.json");
 
 log.level = "info";
 
@@ -24,7 +25,7 @@ let sendTorrentList = (ctx, list) => {
         } else {
             list.forEach(async torrent => {
                 try {
-                    await ctx.reply(torrent.title + " " + torrent.size + "\n /" + torrent.id,
+                    await ctx.reply(torrent.title + " " + (torrent.size || " ") + "\n /" + torrent.id,
                         Markup.inlineKeyboard([
                             Markup.callbackButton("⬇️Download", torrent.id),
                             /**
@@ -86,6 +87,8 @@ bot.on("text", async (ctx) => {
                     );
                 } else if (text === "/stop") {
                     await ctx.reply("Ok, see you later!");
+                } else if (text === "/version") {
+                    await ctx.reply(packageInfo.version);
                 } else if (GENRES.indexOf(text.slice(1)) >= 0) {
                     let list = await torrentApi.topMovies(text.slice(1));
                     sendTorrentList(ctx, list.slice(0, 10));

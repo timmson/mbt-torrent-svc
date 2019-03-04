@@ -17,4 +17,5 @@ thriller - Top thriller seeds
 drama - Top drama seeds
 russian -  Top russian seeds
 kids - Top kids seeds
+version - Show version
 ```
