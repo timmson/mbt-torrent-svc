@@ -97,7 +97,7 @@ bot.on("text", async (ctx) => {
                 }
             }
         } else {
-            let list = [].concat.apply([], await Promise.all([torrentApi.searchMovie(text), torrentApi.searchSoftware(text)]));
+            let list = [].concat.apply([], await Promise.all([torrentApi.searchMovie(text)/*, torrentApi.searchSoftware(text)*/]));
             await sendTorrentList(ctx, list);
         }
     } catch (err) {
