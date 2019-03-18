@@ -1,4 +1,10 @@
 module.exports = {
+    to: [
+        {
+            id: "<your id>",
+            username: "<your username>"
+        }
+    ],
     telegram: {
         token: "<your key>",
         params: {
