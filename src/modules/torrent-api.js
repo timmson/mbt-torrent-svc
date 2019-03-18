@@ -71,7 +71,7 @@ TorrentApi.prototype.detail = function (textId) {
             }
             resolve(detail)
         } catch (err) {
-            log.error(err);
+            log.error(JSON.stringify(err));
             reject(err);
         }
     });
