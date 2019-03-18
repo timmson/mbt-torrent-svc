@@ -121,7 +121,7 @@ bot.on("callback_query", async (ctx) => {
 });
 
 bot.startPolling();
-bot.sendMessage(config.to[0].id, "Started at " + new Date()).catch(log.error);
+bot.telegram.sendMessage(config.to[0].id, "Started at " + new Date()).catch(log.error);
 
 log.info("Torrent Bot has started");
 log.info("Please press [CTRL + C] to stop");
