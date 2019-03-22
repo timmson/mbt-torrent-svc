@@ -116,7 +116,7 @@ bot.on("callback_query", async (ctx) => {
         });
     } catch (err) {
         log.error(err);
-        await ctx.answerCbQuery(err.toString());
+        ctx.answerCbQuery(err.toString()).catch(log.error);
     }
 });
 
