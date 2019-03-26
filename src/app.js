@@ -32,7 +32,7 @@ let sendTorrentList = (ctx, list) => {
                              * TODO it later
                              Markup.callbackButton("🖥 Download to PC", torrent.id),
                              */
-                            Markup.callbackButton("🌍️ Open", torrent.url),
+                            Markup.urlButton("🌍️ Open", torrent.url),
 
                         ]).extra());
                 } catch (err) {
