@@ -67,7 +67,7 @@ let sendTorrentDetail = (ctx, detail) => {
 };
 
 bot.on("text", async (ctx) => {
-    log.info(ctx.from.username + " <- " + ctx.message.text);
+    log.info(ctx.from.username + "[" + ctx.from.id + "]" + " <- " + ctx.message.text);
     const text = ctx.message.text;
     try {
         if (text[0] === "/") {
