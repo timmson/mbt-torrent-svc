@@ -1,9 +1,8 @@
 ## Bot for torrents
-Author: [timmson666@mail.ru](mailto:timmson666@mail.ru)
 
 ### Requirements
 
- * Nodejs 8
+ * Nodejs 10
  
 ### Commands
 ```

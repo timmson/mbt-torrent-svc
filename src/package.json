@@ -1,17 +1,19 @@
 {
   "name": "torrent-bot",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Bot for torrents",
   "main": "app.js",
   "private": true,
   "dependencies": {
     "body-parser": "1.18.3",
+    "eslint": "6.8.0",
     "log4js": "^3.0.1",
-    "node-t-tracker": "0.6.7",
+    "node-t-tracker": "0.6.8",
     "request": "2.87.0",
     "telegraf": "3.27.1"
   },
   "scripts": {
+    "lint": "npx eslint app.js",
     "start": "node app.js",
     "test": "node test.js"
   },
