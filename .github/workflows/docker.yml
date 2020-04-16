@@ -1,0 +1,72 @@
+name: Docker
+
+on:
+  push:
+    # Publish `master` as Docker `latest` image.
+    branches:
+      - master
+
+    # Publish `v1.2.3` tags as releases.
+    tags:
+      - v*
+
+  # Run tests for any PRs.
+  pull_request:
+
+jobs:
+
+  # Push image to GitHub Packages.
+  # See also https://docs.docker.com/docker-hub/builds/
+  push:
+
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Generate config
+        run: echo "${{ secrets.CONFIG_FILE }}" > src/config.js
+
+      - name: Build image
+        run: docker-compose build
+
+      - name: Log into registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+
+      - name: Push image
+        run: |
+          SERVICE_NAME=$(echo '${{ github.repository }}' | cut -d'/' -f2)
+          echo SERVICE_NAME=$SERVICE_NAME
+
+          IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/$SERVICE_NAME
+          echo IMAGE_ID1=$IMAGE_ID
+          
+          # Change all uppercase to lowercase
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+
+          # Strip git ref prefix from version
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+
+          # Strip "v" prefix from tag name
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+
+          # Use Docker `latest` tag convention
+          [ "$VERSION" == "master" ] && VERSION=latest
+
+          echo IMAGE_ID2=$IMAGE_ID
+          echo VERSION=$VERSION
+
+          docker tag $SERVICE_NAME $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION
+
+  deploy:
+
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+
+    needs: push
+
+    steps:
+    - name: Webhook
+      run: curl "${{ secrets.DEPLOY_URL }}"
