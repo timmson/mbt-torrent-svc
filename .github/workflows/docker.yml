@@ -69,4 +69,4 @@ jobs:
 
     steps:
     - name: Webhook
-      run: curl -f --show-error"${{ secrets.DEPLOY_URL }}"
+      run: curl -f --show-error "${{ secrets.DEPLOY_URL }}"
