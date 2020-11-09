@@ -9,7 +9,7 @@ const Markup = require("telegraf/markup");
 const bot = new Telegraf(config.telegram.token);
 
 const TorrentApi = require("./modules/torrent-api");
-const torrentApi = new TorrentApi(config);
+const torrentApi = null;/*new TorrentApi(config);*/
 
 
 const GENRES = ["comedy", "fantasy", "horror", "action", "thriller", "drama", "russian", "kids"];
