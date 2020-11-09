@@ -60,13 +60,13 @@ jobs:
           docker tag $SERVICE_NAME $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
 
-  deploy:
-
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push'
-
-    needs: push
-
-    steps:
-    - name: Webhook
-      run: curl -f --show-error "${{ secrets.DEPLOY_URL }}"
+#  deploy:
+#
+#    runs-on: ubuntu-latest
+#    if: github.event_name == 'push'
+#
+#    needs: push
+#
+#    steps:
+#    - name: Webhook
+#      run: curl -f --show-error "${{ secrets.DEPLOY_URL }}"

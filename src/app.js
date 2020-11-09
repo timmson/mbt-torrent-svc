@@ -69,6 +69,9 @@ let sendTorrentDetail = (ctx, detail) => {
 bot.on("text", async (ctx) => {
 	log.info(ctx.from.username + "[" + ctx.from.id + "]" + " <- " + ctx.message.text);
 	const text = ctx.message.text;
+	if (1 === 1) {
+		await ctx.reply("Sorry, bot will be deleted in next few days. Please, use other ones;)");
+	}
 	try {
 		if (text[0] === "/") {
 			if (text.search(/(ru\d|kn\d)/) >= 0) {
